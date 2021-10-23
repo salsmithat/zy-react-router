@@ -10,10 +10,20 @@ function createBrowserHistory() {
   function goBack() {
     globalHistory.goBack();
   }
-  function push(path, state) {
+  function push(to, nextState) {
     const action = "PUSH";
-    globalHistory.pushState(state, null, path);
-    let location = { state, pathname: path };
+    let pathname;
+    let state;
+    if (typeof to === "object") {
+      state = to.state;
+      pathname = to.pathname;
+    } else {
+      pathname = to;
+      state = nextState;
+    }
+
+    globalHistory.pushState(state, null, pathname);
+    let location = { state, pathname };
     setState({ action, location });
   }
   window.addEventListener("popstate", (event) => {

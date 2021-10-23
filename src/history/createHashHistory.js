@@ -37,10 +37,17 @@ function createHashHistory() {
       listeners = listeners.filter((i) => i !== listener);
     };
   }
-  function push(path, nextState) {
+  function push(to, nextState) {
     action = "PUSH";
-    state = nextState;
-    window.location.hash = path;
+    let pathname;
+    if (typeof to === "object") {
+      state = to.state;
+      pathname = to.pathname;
+    } else {
+      pathname = to;
+      state = nextState;
+    }
+    window.location.hash = pathname;
   }
   const history = {
     action: "POP",
