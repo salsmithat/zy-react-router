@@ -7,6 +7,12 @@ class Router extends React.Component {
     this.state = {
       location: props.history.location,
     };
+    this.unlisten = props.history.listen((location) => {
+      this.setState({ location });
+    });
+  }
+  componentWillUnmount() {
+    this.unlisten();
   }
   render() {
     let value = {
