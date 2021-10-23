@@ -1,3 +1,5 @@
 # 从零实现 react-router
 
-### Router
+### HashRouter、BrowserRouter、Router
+
+### createHashHistory、createBrowserHistory
