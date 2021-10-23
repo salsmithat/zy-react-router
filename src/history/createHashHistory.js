@@ -54,11 +54,15 @@ function createHashHistory() {
       state: undefined,
     },
   };
-  //   action = "PUSH";
-  //   listener();
-  window.location.hash = window.location.hash
-    ? window.location.hash.slice(1)
-    : "/";
+  if (window.location.hash) {
+    action = "PUSH";
+    listener();
+  } else {
+    window.location.hash = "/";
+  }
+  // window.location.hash = window.location.hash
+  //   ? window.location.hash.slice(1)
+  //   : "/";
   return history;
 }
 
