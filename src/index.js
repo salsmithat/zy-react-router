@@ -4,7 +4,7 @@ import {
   HashRouter as Router,
   Route,
   Switch,
-  Link,
+  NavLink,
   Redirect,
 } from "./react-router-dom";
 import Home from "./components/Home";
@@ -17,15 +17,23 @@ ReactDOM.render(
   <Router>
     <ul>
       <li>
-        <Link to="/" style={{ color: "green" }}>
+        <NavLink
+          to="/"
+          style={{ textDecoration: "line-through" }}
+          activeStyle={{
+            color: "red",
+          }}
+          activeClassName="active"
+          exact
+        >
           首页
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link to="/user">用户管理</Link>
+        <NavLink to="/user">用户管理</NavLink>
       </li>
       <li>
-        <Link to="/profile">个人中心</Link>
+        <NavLink to="/profile">个人中心</NavLink>
       </li>
     </ul>
     <Switch>
