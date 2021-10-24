@@ -1,55 +1,38 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  HashRouter as Router,
-  Route,
-  Link,
-  useHistory,
-  useLocation,
-  useRouteMatch,
-  useParams,
-} from "./react-router-dom";
+import { HashRouter as Router, Route, Link } from "./react-router-dom";
 
-function Home() {
-  return <div>Home</div>;
+let LazyHome = React.lazy(() => import("./components/Home"));
+let LazyProfile = React.lazy(() => import("./components/Profile"));
+function SuspenseHome() {
+  return (
+    <React.Suspense fallback={<div>loading</div>}>
+      <LazyHome />
+    </React.Suspense>
+  );
 }
-function Post() {
-  let match = useRouteMatch({
-    path: "/post/:id",
-    strict: true,
-    sensitive: true,
-  });
-  console.log("match", match);
-  return <div>Post</div>;
-}
-function UserDetail() {
-  let history = useHistory();
-  let location = useLocation();
-  let params = useParams();
-  console.log(history, location, params);
-  return <div>Home</div>;
+function SuspenseProfile() {
+  return (
+    <React.Suspense fallback={<div>loading</div>}>
+      <LazyProfile />
+    </React.Suspense>
+  );
 }
 ReactDOM.render(
   <Router>
     <div>
       <ul>
         <li>
-          <Link>首页</Link>
+          <Link to="/">首页</Link>
         </li>
         <li>
-          <Link
-            to={{ pathname: "/user/detail/1", state: { id: 1, name: "张三" } }}
-          >
+          <Link to={{ pathname: "/user", state: { id: 1, name: "张三" } }}>
             用户1的详情页
           </Link>
         </li>
-        <li>
-          <Link to="/post/1">帖子</Link>
-        </li>
       </ul>
-      <Route path="/" component={Home} />
-      <Route path="/user/detail/:id" component={UserDetail} />
-      <Route path="/post/:id" component={Post} />
+      <Route path="/" exact component={SuspenseHome} />
+      <Route path="/user" component={SuspenseProfile} />
     </div>
   </Router>,
   document.getElementById("root")
