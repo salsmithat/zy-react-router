@@ -12,9 +12,11 @@ import User from "./components/User";
 import Profile from "./components/Profile";
 import Protected from "./components/Protected";
 import Login from "./components/Login";
+import NavHeader from "./components/NavHeader";
 
 ReactDOM.render(
   <Router>
+    <NavHeader title="标题" />
     <ul>
       <li>
         <NavLink
