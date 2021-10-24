@@ -3,48 +3,54 @@ import ReactDOM from "react-dom";
 import {
   HashRouter as Router,
   Route,
-  Switch,
-  NavLink,
-  Redirect,
+  Link,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+  useParams,
 } from "./react-router-dom";
-import Home from "./components/Home";
-import User from "./components/User";
-import Profile from "./components/Profile";
-import Protected from "./components/Protected";
-import Login from "./components/Login";
-import NavHeader from "./components/NavHeader";
 
+function Home() {
+  return <div>Home</div>;
+}
+function Post() {
+  let match = useRouteMatch({
+    path: "/post/:id",
+    strict: true,
+    sensitive: true,
+  });
+  console.log("match", match);
+  return <div>Post</div>;
+}
+function UserDetail() {
+  let history = useHistory();
+  let location = useLocation();
+  let params = useParams();
+  console.log(history, location, params);
+  return <div>Home</div>;
+}
 ReactDOM.render(
   <Router>
-    <NavHeader title="标题" />
-    <ul>
-      <li>
-        <NavLink
-          to="/"
-          style={{ textDecoration: "line-through" }}
-          activeStyle={{
-            color: "red",
-          }}
-          activeClassName="active"
-          exact
-        >
-          首页
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/user">用户管理</NavLink>
-      </li>
-      <li>
-        <NavLink to="/profile">个人中心</NavLink>
-      </li>
-    </ul>
-    <Switch>
-      <Route path="/" component={Home} exact />
-      <Route path="/user" component={User} />
-      <Protected path="/profile" component={Profile} />
-      <Route path="/login" component={Login} />
-      <Redirect to="/" />
-    </Switch>
+    <div>
+      <ul>
+        <li>
+          <Link>首页</Link>
+        </li>
+        <li>
+          <Link
+            to={{ pathname: "/user/detail/1", state: { id: 1, name: "张三" } }}
+          >
+            用户1的详情页
+          </Link>
+        </li>
+        <li>
+          <Link to="/post/1">帖子</Link>
+        </li>
+      </ul>
+      <Route path="/" component={Home} />
+      <Route path="/user/detail/:id" component={UserDetail} />
+      <Route path="/post/:id" component={Post} />
+    </div>
   </Router>,
   document.getElementById("root")
 );
