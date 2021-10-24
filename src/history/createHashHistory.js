@@ -4,6 +4,7 @@ function createHashHistory() {
   let action = "POP";
   let state;
   let listeners = [];
+  let currentMessage;
   function go(n) {
     action = "POP";
     index += n;
@@ -47,7 +48,20 @@ function createHashHistory() {
       pathname = to;
       state = nextState;
     }
+    if (currentMessage) {
+      let message = currentMessage({ pathname });
+      let allow = window.confirm(message);
+      if (!allow) {
+        return;
+      }
+    }
     window.location.hash = pathname;
+  }
+  function block(newMessage) {
+    currentMessage = newMessage;
+    return () => {
+      currentMessage = null;
+    };
   }
   const history = {
     action: "POP",
@@ -60,6 +74,7 @@ function createHashHistory() {
       pathname: window.location.hash.slice(1),
       state: undefined,
     },
+    block,
   };
   if (window.location.hash) {
     action = "PUSH";

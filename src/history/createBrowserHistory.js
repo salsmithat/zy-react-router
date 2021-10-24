@@ -1,6 +1,7 @@
 function createBrowserHistory() {
   let listeners = [];
   let globalHistory = window.history;
+  let currentMessage;
   function go(n) {
     globalHistory.go(n);
   }
@@ -21,7 +22,13 @@ function createBrowserHistory() {
       pathname = to;
       state = nextState;
     }
-
+    if (currentMessage) {
+      let message = currentMessage({ pathname });
+      let allow = window.confirm(message);
+      if (!allow) {
+        return;
+      }
+    }
     globalHistory.pushState(state, null, pathname);
     let location = { state, pathname };
     setState({ action, location });
@@ -43,6 +50,12 @@ function createBrowserHistory() {
       listeners = listeners.filter((i) => i !== listener);
     };
   }
+  function block(newMessage) {
+    currentMessage = newMessage;
+    return () => {
+      currentMessage = null;
+    };
+  }
   const history = {
     action: "POP",
     push,
@@ -54,6 +67,7 @@ function createBrowserHistory() {
       pathname: window.location.pathname,
       state: globalHistory.state,
     },
+    block,
   };
   return history;
 }
